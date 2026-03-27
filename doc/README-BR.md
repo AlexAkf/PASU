@@ -5,7 +5,7 @@
 
 
 # Licença
-- Português: [LICENÇA](LICENSE-BR.txt)
+- Português: [LICENSE-BR](LICENSE-BR.txt)
 - English: [LICENSE](LICENSE)
 
 
