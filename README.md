@@ -1,6 +1,6 @@
 # Documentation
 - English (Translation made by ChatGPT.)
-- Português: [README](/doc/README-BR.md)
+- Português: [README-BR](/doc/README-BR.md)
 
 
 
