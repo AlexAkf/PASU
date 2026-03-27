@@ -1,0 +1,110 @@
+<!--
+Template de e-mail enviado para a equipe de TI quando um novo chamado é aberto.
+
+Este arquivo é renderizado pelo Google Apps Script usando HtmlService.
+As variáveis são injetadas pelo script:
+- dados: informações do chamado
+- CORES: cores definidas no config
+- EMAIL: configurações de e-mail do sistema
+
+Sintaxe <?= ?> é usada pelo Apps Script para inserir valores dinamicamente.
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= EMAIL.EQUIPE.ASSUNTO ?></title>
+  <style>
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: <?= CORES.GERAL.FUNDO ?>; -webkit-font-smoothing: antialiased; }
+    table { border-collapse: collapse; }
+    .wrapper { width: 100%; background-color: <?= CORES.GERAL.FUNDO ?>; padding: 20px 0; }
+    .container { max-width: 600px; background-color: <?= CORES.GERAL.CARD ?>; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+    .header { background-color: <?= dados.cor ?>; padding: 25px; text-align: center; color: #ffffff; }
+    .content { padding: 32px; color: <?= CORES.GERAL.TEXTO ?>; line-height: 1.6; }
+    .data-table { width: 100%; margin: 24px 0; border: 1px solid #f0f0f0; border-radius: 4px; }
+    .data-table td { padding: 12px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    .label { font-weight: bold; width: 35%; background-color: #f9f9f9; }
+    .section-title { font-size: 16px; font-weight: 700; margin: 24px 0 8px; color: <?= dados.cor ?>; }
+    .box-detail { padding: 16px; background-color: #f8fafd; border-left: 4px solid <?= dados.cor ?>; font-size: 13px; word-break: break-all; }
+    .footer { background-color: #fcfcfc; padding: 20px; text-align: center; font-size: 12px; color: <?= CORES.GERAL.RODAPE ?>; border-top: 1px solid #eeeeee; }
+  </style>
+</head>
+<body>
+
+  <table class="wrapper" role="presentation">
+    <tr>
+      <td align="center">
+        <table class="container" role="presentation">
+          
+          <tr>
+            <td class="header">
+              <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                 <?= EMAIL.EQUIPE.ASSUNTO ?>
+              </h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="content">
+              <p style="margin-top: 0; font-size: 16px;">Olá Equipe,</p>
+              <p style="font-size: 14px;">Um novo chamado foi registrado. Detalhes técnicos abaixo:</p>
+
+              <table class="data-table" role="presentation">
+                <tr><td class="label">Solicitante:</td><td><?= dados.nome ?></td></tr>
+                <tr><td class="label">Setor:</td><td><?= dados.setor ?></td></tr>
+                <tr><td class="label">Tipo:</td><td><?= dados.chamado ?></td></tr>
+                <tr>
+                  <td class="label">Urgência:</td>
+                  <td style="color: <?= dados.cor ?>; font-weight: bold;"><?= dados.prioridade.toUpperCase() ?></td>
+                </tr>
+              </table>
+
+              <div class="section-title">Descrição do Problema:</div>
+              <div class="box-detail"><?= dados.descricao ?></div>
+
+              <div class="section-title">Anexos:</div>
+              <div class="box-detail" style="margin-bottom: 30px;"><?= dados.anexos ?></div>
+
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                <tr>
+                  <td align="center" style="padding: 10px 0 20px 0;">
+                    <table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                      <tr>
+                        <td align="center" style="border-radius: 4px; background-color: <?= dados.cor ?>;">
+                          
+                          <!-- Link para o dashboard configurado no sistema -->
+                          <a href="<?= dados.link ?>" target="_blank"
+                            
+                            style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 15px; padding: 12px 30px; display: inline-block;">
+                            ABRIR DASHBOARD
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td class="footer">
+              <strong><?= EMAIL.EQUIPE.RODAPE ?></strong><br>
+              Este é um disparo automático do sistema PASU.
+            </td>
+          </tr>
+        </table>
+
+        <p style="padding: 20px; font-size: 11px; color: <?= CORES.GERAL.RODAPE ?>; text-align: center; opacity: 0.8;">
+          &copy; 2026 PASU - ARSP | Portal de Atendimento e Suporte ao Usuário
+        </p>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!--
+Template de e-mail enviado ao usuário quando há atualização no status de um chamado.
+
+Este arquivo é renderizado pelo Google Apps Script usando HtmlService.
+As variáveis são injetadas automaticamente pelo script:
+
+- dados: informações do chamado (nome, status, descrição, protocolo, etc.)
+- CORES: cores definidas no arquivo de configuração do sistema
+- EMAIL: configurações de e-mail utilizadas pelo PASU
+
+Comportamento do template:
+- Exibe o status atual do chamado sincronizado com o Trello
+- Mostra o protocolo para rastreamento
+- Pode exibir um botão de avaliação quando o chamado é concluído
+
+Sintaxe <?= ?> é usada pelo Apps Script para inserir valores dinamicamente.
+Estruturas como <? if (...) { ?> são usadas para renderização condicional.
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= EMAIL.USUARIO.ASSUNTO ?></title>
+  <style>
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: <?= CORES.GERAL.FUNDO ?>; -webkit-font-smoothing: antialiased; }
+    table { border-collapse: collapse; }
+    .wrapper { width: 100%; background-color: <?= CORES.GERAL.FUNDO ?>; padding: 20px 0; }
+    .container { max-width: 600px; background-color: <?= CORES.GERAL.CARD ?>; border: 1px solid #dddddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .header { background-color: <?= CORES.GERAL.TABELA ?>; padding: 25px; text-align: center; color: #ffffff; }
+    .content { padding: 30px; color: <?= CORES.GERAL.TEXTO ?>; line-height: 1.5; }
+    .data-table { width: 100%; margin: 20px 0; border: 1px solid #eeeeee; font-size: 14px; }
+    .data-table td { padding: 12px; border-bottom: 1px solid #eeeeee; }
+    .label { font-weight: bold; width: 35%; background-color: #f9f9f9; }
+    .status-row { background-color: #f8fafd; }
+    .status-text { font-weight: bold; color: <?= CORES.GERAL.TABELA ?>; font-size: 16px; }
+    .section-title { font-size: 16px; font-weight: bold; margin: 25px 0 10px; color: <?= CORES.GERAL.TABELA ?>; }
+    .box-detail { padding: 15px; background-color: #f8fafd; border-left: 4px solid <?= CORES.GERAL.TABELA ?>; font-size: 13px; line-height: 1.4; }
+    .footer { background-color: #fcfcfc; padding: 20px; text-align: center; font-size: 12px; color: <?= CORES.GERAL.RODAPE ?>; border-top: 1px solid #eeeeee; }
+    .btn-container { padding: 10px 30px 30px 30px; text-align: center; }
+    .button { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 15px; padding: 12px 30px; display: inline-block; background-color: <?= CORES.GERAL.TABELA ?>; border-radius: 4px; }
+    .copyright { padding: 20px; font-size: 11px; color: <?= CORES.GERAL.RODAPE ?>; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <table class="wrapper" role="presentation">
+    <tr>
+      <td align="center">
+        <table class="container" role="presentation">
+          
+          <tr>
+            <td class="header">
+              <p style="margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                <?= EMAIL.USUARIO.ASSUNTO ?>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="content">
+              <p style="margin-top: 0; font-size: 16px;">Olá, <strong><?= dados.nome ?></strong>.</p>
+              <p style="font-size: 14px;">Informamos que houve uma movimentação no seu chamado:</p>
+
+              <table class="data-table" role="presentation">
+                <tr>
+                  <td class="label">Tipo de Chamado:</td>
+                  <td><?= dados.chamado ?></td>
+                </tr>
+                <tr>
+                  <td class="label">Protocolo:</td>
+
+                  <!-- ID único do chamado gerado pelo sistema -->
+                  <td><strong><?= dados.idChamado ?></strong></td>
+
+                </tr>
+                <tr class="status-row">
+                  <td class="label">Novo Status:</td>
+                  <td class="status-text">
+
+                    <!-- Status atualizado automaticamente a partir do Trello -->
+                    <?= (dados.status || "PENDENTE").toUpperCase() ?>
+
+                  </td>
+                </tr>
+              </table>
+
+              <div class="section-title">Resumo da sua solicitação:</div>
+              <div class="box-detail">
+                <strong>Descrição:</strong><br>
+                <?= dados.descricao ?>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Botão de avaliação exibido apenas quando o chamado é concluído -->
+          <? if (dados.link) { ?>
+          <tr>
+            <td align="center" style="padding: 10px 30px 40px 30px;">
+              <p style="font-size: 14px; color: <?= CORES.GERAL.TEXTO ?>; margin-bottom: 20px; font-family: Arial, sans-serif;">
+                Sua opinião é fundamental! Conte-nos como foi seu atendimento:
+              </p>
+              <table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                <tr>
+                  <td align="center" style="border-radius: 4px; background-color: <?= CORES.GERAL.TABELA ?>;">
+                    <a href="<?= dados.link ?>" target="_blank" 
+                      style="color: #ffffff; 
+                              text-decoration: none; 
+                              font-weight: bold; 
+                              font-size: 15px; 
+                              padding: 12px 30px; 
+                              display: inline-block; 
+                              font-family: Arial, sans-serif;
+                              text-transform: uppercase;">
+                      AVALIAR ATENDIMENTO
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <? } ?>
+
+          <tr>
+            <td class="footer">
+              <strong><?= EMAIL.USUARIO.RODAPE ?></strong><br>
+              Este é um disparo automático do sistema PASU.
+            </td>
+          </tr>
+        </table>
+
+        <table class="copyright" width="100%" role="presentation">
+          <tr>
+            <td>
+              &copy; 2026 PASU - ARSP | Portal de Atendimento e Suporte ao Usuário
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
